@@ -58,8 +58,38 @@ bank, so its constraint carries no `IO_TYPE` either.
 **Memory inference.** The 8 kiB main RAM maps cleanly to four BSRAM blocks.
 This was the main risk in the port: upstream needs a Quartus-specific
 `servant_ram_quartus.sv` because byte-enable inference is fragile, but the
-generic `servant_ram.v` works as-is on Gowin. The SERV register file maps to
-LUTRAM.
+generic `servant_ram.v` works as-is on Gowin.
+
+## Resource usage
+
+GowinSynthesis, `blinky.hex` at `memsize=8192`, no PLL:
+
+| | LUT4 | REG | ALU | BSRAM | SSRAM |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| **Whole SoC** | **343** | **247** | **71** | **5** | **2** |
+| SERV core (`serv_top`) | 260 | 151 | 4 | 0 | 2 |
+| Timer | 3 | 65 | 62 | 0 | 0 |
+| Main RAM, 8 kiB | 8 | 1 | 0 | 4 | 0 |
+| Register file | 51 | 19 | 0 | 1 | 0 |
+
+That is about 4% of the GW1NR-9's 8640 LUT4.
+
+Three things worth noting:
+
+The 64-bit `mtime` counter costs more than the CPU's entire control path:
+65 registers and 62 ALU cells against the core's 151 registers and 4 ALU.
+
+Gowin places the SERV register file in BSRAM. Yosys `synth_gowin` chose LUTRAM
+for the same RTL, so the two tools disagree here.
+
+Gowin's own synthesis is noticeably tighter than yosys on this design, 343
+LUT4 against 722.
+
+**Do not compare the 260 LUT4 core figure to upstream's 198 LUT on iCE40.**
+That number is for the minimal configuration without CSR support; this build
+has CSRs, which alone account for 29 LUT4 and 10 registers, and the LUT
+architectures differ. A fair comparison means synthesising `serv_synth_wrapper`
+standalone with upstream's minimal parameters.
 
 ## Build
 

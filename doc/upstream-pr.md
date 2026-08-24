@@ -45,6 +45,25 @@ the question entirely.
 **Does the RAM infer correctly?** Yes, four BSRAM blocks, verified in both
 Gowin EDA and yosys. No Gowin-specific RAM file is needed, unlike Quartus.
 
+## Resource usage
+
+GowinSynthesis, `blinky.hex` at `memsize=8192`:
+
+| | LUT4 | REG | ALU | BSRAM | SSRAM |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Whole SoC | 343 | 247 | 71 | 5 | 2 |
+| `serv_top` | 260 | 151 | 4 | 0 | 2 |
+| Timer | 3 | 65 | 62 | 0 | 0 |
+| Main RAM | 8 | 1 | 0 | 4 | 0 |
+| Register file | 51 | 19 | 0 | 1 | 0 |
+
+About 4% of the GW1NR-9's 8640 LUT4.
+
+Not directly comparable to the 198 LUT iCE40 figure in the README: this build
+has CSRs enabled, and the register file lands in BSRAM here rather than LUTRAM.
+Happy to run `serv_synth_wrapper` standalone with minimal parameters if a
+comparable number for the README table would be useful.
+
 ## Testing done
 
 - `blinky.hex`, LED0 blinks.
