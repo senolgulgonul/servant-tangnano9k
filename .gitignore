@@ -1,0 +1,11 @@
+# Gowin EDA build artefacts
+impl/
+*.gprj
+*.gprj.user
+*.fs
+*.db
+*.log
+*.rpt
+
+# Local memory images copied in from serv/sw
+/*.hex
