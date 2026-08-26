@@ -24,6 +24,7 @@ build.tcl                               gw_sh build script
 setup.ps1                               PowerShell bootstrap for Windows
 patch/servant.core.diff                 fusesoc target, ready for upstream
 doc/kurulum-tr.md                       step by step setup guide (Turkish)
+doc/installation.md                     (English)
 ```
 
 The layout mirrors upstream's, so the port drops straight into a fork of
@@ -105,7 +106,7 @@ out the tree, `-Load` to program afterwards.
 
 ### Gowin EDA, GUI
 
-See `doc/kurulum-tr.md`. The part is `GW1NR-LV9QN88PC6/I5` and the **device
+See doc/installation.md (English) or doc/kurulum-tr.md (Turkish). The part is `GW1NR-LV9QN88PC6/I5` and the **device
 version must be C**; leave it unset and the bitstream still builds and still
 loads, but the board does nothing and nothing is reported.
 
